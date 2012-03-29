@@ -1,11 +1,59 @@
-<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
-        "http://struts.apache.org/dtds/struts-2.0.dtd">
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN" "http://struts.apache.org/dtds/struts-2.0.dtd">
 <struts>
-    <package name="foo-retention-adapter-plugin-actions" extends="community-default">
+	<package name="foo-plugin-admin-actions" namespace="/admin" extends="community-admin-default">
+		<action name="configure-foo" class="com.jivesoftware.sbs.plugins.foo.action.admin.JiveFooAdminAction">
+			<result name="error" type="freemarker">/plugins/jive-fu-plugin/resources/templates/admin/configure-foo.ftl</result>
+			<result name="input" type="freemarker">/plugins/jive-fu-pack-plugin/resources/templates/admin/configure-foo.ftl</result>
+            <result name="success" type="freemarker">/plugins/jive-fu-pack-plugin/resources/templates/admin/configure-foo.ftl</result>
+        </action>
+	</package>
 
-    </package>
+    <package name="foo-plugin-actions" extends="community-default">
+        <interceptors>
+            <interceptor name="fooViewCount" class="com.jivesoftware.community.action.ViewCountInterceptor">
+                <param name="type">foo</param>
+                <param name="includeResults">success</param>
+            </interceptor>
+            <!-- REGISTERED, BUT NOT IN THE STACK -->
+            <interceptor name="fooExampleInterceptor" class="com.jivesoftware.sbs.plugins.foo.action.interceptor.FooInterceptor" />
+        </interceptors>
+        <action name="create-foo" class="com.jivesoftware.sbs.plugins.foo.action.CreateFooAction">
+            <interceptor-ref name="defaultStack"/>
+            <interceptor-ref name="token">
+                <param name="excludeMethods">cancel,input, imagePicker</param>
+            </interceptor-ref>
+            <result name="success" type="redirect">/foos/${fooId}</result>
+            <result name="success-moderation" type="freemarker">/plugins/jive-fu-plugin/resources/templates/edit-foo-success.ftl</result>
+            <result name="input" type="freemarker">/plugins/jive-fu-plugin/resources/templates/edit-foo.ftl</result>
+            <result name="cancel" type="redirect">${cancelURL}</result>
+            <result name="image-picker" type="redirect">image-picker!input.jspa?contentResourceSessionKey=${sessionKey}&amp;containerType=${container.objectType}&amp;container=${container.ID}&amp;instantiatedFromGUIEditor=${postedFromGUIEditor}</result>
+        </action>
 
-    <package name="foo-retention-adapter-plugin-actions" namespace="/foo" extends="community-default">
+        <action name="delete-foo" class="com.jivesoftware.sbs.plugins.foo.action.DeleteFooAction">
+            <interceptor-ref name="defaultStack" />
+            <interceptor-ref name="token">
+                <param name="excludeMethods">cancel,input</param>
+            </interceptor-ref>
+            <result name="input">/plugins/jive-fu-plugin/resources/templates/delete-foo.ftl</result>
+            <result name="success" type="redirect">${redirectURL}?view=foo</result>
+        </action>
 
+        <action name="view-foo" class="com.jivesoftware.sbs.plugins.foo.action.ViewFooAction">
+            <interceptor-ref name="defaultStack" />
+            <interceptor-ref name="fooViewCount" />
+            <result name="success">/plugins/jive-fu-plugin/resources/templates/foo.ftl</result>
+        </action>
+
+        <action name="edit-foo" class="com.jivesoftware.sbs.plugins.foo.action.EditFooAction">
+            <interceptor-ref name="defaultStack"/>
+            <interceptor-ref name="token">
+                <param name="excludeMethods">cancel,input, imagePicker</param>
+            </interceptor-ref>
+            <result name="success" type="redirect">/foos/${foo.ID}</result>
+            <result name="success-moderation" type="freemarker">/plugins/jive-fu-plugin/resources/templates/edit-foo-success.ftl</result>
+            <result name="input" type="freemarker">/plugins/jive-fu-plugin/resources/templates/edit-foo.ftl</result>
+            <result name="cancel" type="redirect">/foos/${foo.ID}</result>
+            <result name="image-picker" type="redirect">image-picker!input.jspa?contentResourceSessionKey=${sessionKey}&amp;containerType=${foo.jiveContainer.objectType}&amp;container=${foo.jiveContainer.ID}&amp;instantiatedFromGUIEditor=${postedFromGUIEditor}</result>
+        </action>
     </package>
 </struts>

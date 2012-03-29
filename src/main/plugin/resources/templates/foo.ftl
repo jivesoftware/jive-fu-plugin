@@ -5,7 +5,7 @@
     <style type="text/css" media="screen">
         @import "<@s.url value='/styles/jive-people.css'/>";
     </style>
-    
+
     <#-- Include JavaScript Library and RTE -->
     <@resource.javascript header="true">
         ${macroJavaScript}
@@ -15,10 +15,10 @@
     <@resource.template file="/soy/share/share.soy" />
     <@resource.javascript file="/resources/scripts/apps/share/views/share_view.js" />
     <@resource.javascript file="/resources/scripts/apps/share/models/share_source.js" />
-    <@resource.javascript file="/resources/scripts/apps/share/main.js" />  
-    
+    <@resource.javascript file="/resources/scripts/apps/share/main.js" />
+
     <@resource.template file="/soy/nav/movecontent.soy" />
-    
+
     <@resource.javascript>
 
         $j(function() {
@@ -37,9 +37,9 @@
                         stopFollowing  : '${stopFollowText?js_string}',
                         followError    : '${followError?js_string}'}
 
-            var jiveFollow = new jive.FollowApp.Main({objectType: ${foo.objectType?c}, objectID:${foo.ID?c}, featureName:'foo', i18n:i18n});           
+            var jiveFollow = new jive.FollowApp.Main({objectType: ${foo.objectType?c}, objectID:${foo.ID?c}, featureName:'foo', i18n:i18n});
         </#if>
-        
+
         var jiveShare = new jive.ShareApp.Main({objectType: ${foo.objectType?c}, objectID:${foo.ID?c}, linkId:'jive-link-foo-sendnotify'});
         var jiveMoveContent = new jive.Move.Content.Main({
             objectType: ${foo.objectType?c},
@@ -50,7 +50,7 @@
             containerType: ${container.objectType?c}});
         var jiveDeleteContent = new jive.Modalizer.Main({triggers:['#jive-foo-delete a'], liveTriggers:['.js-link-delete']});
         var jiveReportAbuse = new jive.Modalizer.Main({triggers:['#jive-link-abuse a'], liveTriggers:['.js-link-abuse'], width: 'medium'});
-        
+
     </@resource.javascript>
 
     <#if legacyBreadcrumb>
@@ -108,10 +108,10 @@
                     </div>
                 </div>
                 </#if>
-                
+
                 <div id="object-follow-notify" class="jive-info-box" style="display:none"></div>
                 <div id="content-featured-notify" class="jive-info-box" style="display:none"></div>
-                <@jive.showMovedMesage content=foo container=container />                
+                <@jive.showMovedMesage content=foo container=container />
                 <#include "/template/global/include/form-message.ftl"/>
 
                 <div class="jive-content clearfix jive-foo">
@@ -166,7 +166,7 @@
                     </section>
                     <footer class="jive-content-footer clearfix font-color-meta">
                         <@jive.displayViewCount viewCount=foo.viewCount containerClass='jive-content-footer-item'/>
-                        
+
                         <#assign allObjectTagNames = "" />
                         <#assign objectTagSets = action.getObjectTagSets(foo)>
                         <#if (objectTagSets.hasNext())>
@@ -175,19 +175,19 @@
                             <#list objectTagSets as tagSet> ${tagSet.name}<#if objectTagSets.hasNext()>, </#if></#list>
                         </span>
                         </#if>
-                        
+
                         <#assign canEditTags=canEdit >
                         <#include "/template/global/include/tag-macros.ftl" />
-                        <@viewAndEditTags tags=fooTags entityDescriptor=foo container=foo.jiveContainer user=user canEditTags=canEditTags />                        
+                        <@viewAndEditTags tags=fooTags entityDescriptor=foo container=foo.jiveContainer user=user canEditTags=canEditTags />
                     </footer>
                 </div>
                 <@jive.ratings container foo "foo"/>
-            
+
                 <@comments contentObject=foo />
             </div>
         </div>
         <div id="jive-body-sidebarcol-container" class="j-column j-column-s j-content-extras">
-            <#include "/plugins/foo-type/resources/templates/foo-sidebar.ftl" />
+            <#include "/plugins/jive-fu-plugin/resources/templates/foo-sidebar.ftl" />
         </div>
     </div>
 </body>

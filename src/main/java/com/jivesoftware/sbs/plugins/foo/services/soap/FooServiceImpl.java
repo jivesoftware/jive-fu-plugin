@@ -3,12 +3,8 @@ package com.jivesoftware.sbs.plugins.foo.services.soap;
 import java.util.Date;
 
 import javax.jws.WebMethod;
-import javax.jws.WebParam;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
-
-import org.codehaus.jra.Get;
-import org.codehaus.jra.HttpResource;
 
 import com.jivesoftware.community.DocumentManager;
 import com.jivesoftware.sbs.plugins.foo.services.FooEntity;
@@ -27,13 +23,8 @@ public class FooServiceImpl implements FooService {
 		this.documentManager = documentManager;
 	} // end setDocumentManager - SPRING MANAGED
 
-
 	@WebMethod
-	@Get
-	@HttpResource(location = "/ping")
-	@Override
-	public String ping(
-			@WebParam(name = "message")String message) {
+	public String ping(String message) {
 		if (message != null) {
 			return new StringBuffer(message).append(" - ").append(new Date().getTime()).toString();
 		} // end if
@@ -42,12 +33,7 @@ public class FooServiceImpl implements FooService {
 
 
 	@WebMethod
-	@Get
-	@HttpResource(location = "/pong")
-	@Override
-	public FooEntity pong(
-			@WebParam(name = "key")String key,
-			@WebParam(name = "value")String value) {
+	public FooEntity pong(String key,String value) {
 		FooEntity foo = new FooEntity();
 		foo.setKey(key);
 		foo.setValue(value);
