@@ -1,0 +1,15 @@
+{namespace jive.widget.foo.fooWidget}
+
+/**
+ * Displays the Foo Widget
+ *
+ * @param title The event being displayed
+ * @param message The URL for the event
+ */
+{template .body}
+<div class="jive-foo-widget-wrapper clearfix">
+	<h1>SOY</h1>
+	<p>{i18nText('global.title')}{i18nText('global.colon')} {$title}</p>
+	<p>{i18nText('global.message')}{i18nText('global.colon')} {$message}</p>
+</div>
+{/template}

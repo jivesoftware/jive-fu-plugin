@@ -1,0 +1,96 @@
+{namespace jive.browse.content.foo}
+/**
+ * @depends template=jive.browse.content.*
+ * @depends template=jive.shared.displayutil.*
+ * @depends path=/resources/scripts/apps/browse/content/flipPrototype.js
+ */
+ 
+/**
+ * Renders a single foo thumbnail item from a {@link BrowseViewItemBean} instance.
+ *
+ * @param id The object ID
+ * @param type The object type
+ * @param link A relative link to the item.
+ * @param iconCss An icon representing the item.
+ * @param subject The item subject.
+ * @param prop Item properties.
+ */
+{template .thumbnailFooItem}
+<div class="card">
+    <div class="j-content-thumb j-doc-thumb j-thumb js-browse-item face card-front {call jive.browse.content.flippable data="$prop"}{param body: 'flippable'/}{/call}" data-object-type="{$type}" data-object-id="{$id}">
+        <header class="js-thumb-header">
+            <h4>
+                <a href="{buildUrl($link)}" title="{$subject|noAutoescape}">
+                    <span class="jive-icon-big {$iconCss}"></span>
+                    <span class="js-header-text j-header-text">{$subject|noAutoescape}</span>
+
+                </a>
+
+            </h4>
+        </header>
+        <section>
+            <article>
+                {if $prop.bodysnippet}
+                    {$prop.bodysnippet|noAutoescape}
+                {/if}
+            </article>
+
+            {if ($prop.author)}
+            <div class="j-author-block">
+                <span class="j-avatar-container">
+                    {call jive.shared.displayutil.avatar data="$prop.author"}
+                        {param size: 24 /}
+                    {/call}
+                </span>
+                <div class="j-author-info font-color-meta">
+                {call jive.browse.content.thumbnailDateBlock data="all"/}
+                </div>
+            </div>
+            {/if}
+        </section>
+        <footer>
+            <div class="j-thumb-footer">
+                {call jive.browse.content.activityInfoBlock data="$prop"}
+                    {param objectId:$id /}
+                    {param objectType:$type /}
+                {/call}
+                <span class="j-thumb-title-meta">
+                    {if $prop.privacyInfo and $prop.privacyInfo.private}
+                        <span src="{buildUrl('/images/transparent.png')}"
+                            class="jive-icon-sml jive-icon-content-private{if $prop.privacyInfo.shared}-shared{/if}"
+                            title="{if $prop.privacyInfo.shared}{i18nText('doc.visibility.restricted.tooltip')}{else}{i18nText('doc.visibility.private.tooltip')}{/if}"
+                            ></span>
+                    {/if}
+                    {if $prop.attachmentInfo and $prop.attachmentInfo.hasAttachments}
+                        <span class="jive-icon-sml jive-icon-content-attachment"></span>
+                    {/if}
+                </span>
+            </div>
+        </footer>
+        {call jive.browse.content.flipperControl data="$prop"/}
+    </div>
+    <div class="j-thumb-back face card-back j-thumb-back-small">
+        <header>
+        <h6><span class="jive-icon-med {$iconCss}"></span>{$subject|noAutoescape}</h6>
+
+        {if $prop.place}
+            <p class="j-browse-content-location font-color-meta-light">
+                {if $prop.place.type == 2020 or $prop.place.type == 37}
+                    // if the place is a usercontainer or personal blog ...
+                    {i18nText('global.by')}{sp}
+                    {call jive.shared.displayutil.userDisplayNameLink data="$prop.author"}
+                        {param extraCss: 'font-color-meta-light'/}
+                    {/call}
+                {else}
+                    {i18nText('global.in')} <a href="{buildUrl($prop.place.link)}" class="font-color-meta-light jivecontainerTT-hover-container" data-objectId="{$prop.place.id}" data-objectType="{$prop.place.type}">{$prop.place.subject}</a>
+                {/if}
+            </p>
+        {/if}
+        </header>
+
+         {call jive.browse.content.thumbnailActionPanel data="all"/}
+        <a href="#" class="j-back-btn j-ui-elem"><span class="j-ui-elem">{i18nText('global.back.button')}</span></a>
+    </div>
+</div>
+{/template}
+

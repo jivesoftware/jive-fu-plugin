@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~
+  ~  $Revision$
+  ~  $Date$
+  ~
+  ~  Copyright (C) 1999-${YEAR} Jive Software. All rights reserved.
+  ~
+  ~  This software is the proprietary information of Jive Software. Use is subject to license terms.
+  -->
+
+<sbs-ext>
+    <objectType beanId="fooObjectType">
+        <entitlements provider="com.jivesoftware.sbs.plugins.foo.provider.FooEntitlementCheckProvider" parent="baseEntitlementProvider">
+            <level name="Create"
+                   description="Allows users to create new foos, comment on existing foos and view all foos">
+                <associate level="Administer"/>
+                <associate level="Moderate"/>
+                <associate level="Create"/>
+                <mask name="Create"/>
+                <mask name="Comment/reply"/>
+                <mask name="Read"/>
+                <mask name="Insert image"/>
+                <mask name="Rate" />
+
+            </level>
+            <level name="Contribute" description="Allows users to comment on and view foos">
+                <associate level="Contribute"/>
+                <mask name="Comment/reply"/>
+                <mask name="Read"/>
+                <mask name="Rate" />
+            </level>
+            <level name="View" description="Allows users to view foos">
+                <associate level="View"/>
+                <mask name="Read"/>
+            </level>
+            <mask name="Create"/>
+            <mask name="Comment/reply"/>
+            <mask name="Read"/>
+            <mask name="Insert image"/>
+            <mask name="Rate"/>
+        </entitlements>
+    </objectType>
+</sbs-ext>

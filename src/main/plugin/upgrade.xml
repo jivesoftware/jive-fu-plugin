@@ -1,0 +1,14 @@
+<!--
+~ Copyright (c) 2009-2010 Jive Software. All rights reserved
+~ This software is the proprietary information of Jive Software. Use is subject to license terms.
+-->
+<upgrade-config>
+    <upgrades>
+        <upgrade order="1">
+            <name>foos</name>
+            <tasks>
+                <task version="100000" className="com.jivesoftware.sbs.plugins.foo.upgrade.FooUpgradeTask"/>
+            </tasks>
+        </upgrade>
+    </upgrades>
+</upgrade-config>

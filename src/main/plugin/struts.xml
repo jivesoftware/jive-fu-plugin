@@ -1,0 +1,11 @@
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+        "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+    <package name="foo-retention-adapter-plugin-actions" extends="community-default">
+
+    </package>
+
+    <package name="foo-retention-adapter-plugin-actions" namespace="/foo" extends="community-default">
+
+    </package>
+</struts>

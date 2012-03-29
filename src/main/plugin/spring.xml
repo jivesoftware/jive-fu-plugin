@@ -1,0 +1,357 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:jaxws="http://cxf.apache.org/jaxws"
+       xmlns:cxf="http://cxf.apache.org/core"
+       xmlns:dwr="http://www.directwebremoting.org/schema/spring-dwr"
+       xmlns:jaxrs="http://cxf.apache.org/jaxrs"
+       xsi:schemaLocation="
+http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd
+http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
+http://www.directwebremoting.org/schema/spring-dwr http://www.directwebremoting.org/schema/spring-dwr-2.0.xsd
+http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd
+http://cxf.apache.org/core http://cxf.apache.org/schemas/core.xsd
+http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd"
+       default-autowire="no">
+
+    <bean id="jiveFooPlugin" class="com.jivesoftware.sbs.plugins.foo.plugin.JiveFooPlugin">
+    	<property name="fooProxyProvider" ref="fooProxyProvider" />
+    	<property name="renderManager" ref="globalRenderManager" />
+    	<property name="eventListenerRegistry" ref="eventListenerRegistry" />
+    	<property name="fooFilter" ref="fooFilter" />
+    	<property name="fooListener" ref="fooListener" />
+    </bean>
+
+    <bean id="fooFilter" class="com.jivesoftware.sbs.plugins.foo.filter.FooFilter" />
+    <bean id="fooListener" class="com.jivesoftware.sbs.plugins.foo.listener.FooListener">
+    	<property name="documentManager" ref="documentManager" />
+   	</bean>
+
+	<bean id="fooRetentionAdapterInstructions" class="com.jivesoftware.retention.listeners.builders.instructions.EventProcessingInstructions">
+		<property name="eventFilter" ref="fooRetentionEventFilter" />
+		<property name="objectSpecialist" ref="fooRetentionSpecialist" />
+	</bean>
+
+	<bean id="fooRetentionEventFilter" class="com.jivesoftware.sbs.plugins.foo.FooRetentionEventFilter" />
+	<bean id="fooRetentionSpecialist" class="com.jivesoftware.sbs.plugins.foo.FooRetentionSpecialist" />
+
+    <bean id="createMenuFooLink" class="com.jivesoftware.sbs.plugins.foo.web.component.CreateFooLink" scope="prototype" parent="actionLinkBase">
+        <property name="iconCss" value="jive-icon-foo" />
+        <property name="nameKey" value="nav.bar.create.foo" />
+        <property name="descriptionKey" value="nav.bar.create.description.foo" />
+        <property name="headingKey" value="nav.bar.create.heading.foo" />
+        <property name="personalContainerTitleKey" value="nav.bar.create.personal_container.title.foo" />
+        <property name="personalContainerCaptionKey" value="nav.bar.create.personal_container.caption.foo" />
+        <property name="searchPlaceholderKey" value="nav.bar.create.search.foo"/>
+        <property name="ordinal" value="8" />
+    </bean>
+
+    <bean id="fooActivityUpgradeProvider" class="com.jivesoftware.sbs.plugins.foo.provider.FooActivityUpgradeProvider" >
+        <property name="dataSource">
+            <util:property-path path="dataSourceFactory.dataSource" />
+        </property>
+    </bean>
+
+    <bean id="fooBeanRowMapper" class="com.jivesoftware.sbs.plugins.foo.dao.FooBeanRowMapper" />
+
+    <bean id="fooBrowseDataProvider" class="com.jivesoftware.sbs.plugins.foo.provider.FooBrowseDataProvider" parent="baseBrowseDataProvider" />
+
+    <bean id="fooBrowseFilterProvider" class="com.jivesoftware.sbs.plugins.foo.provider.FooBrowseFilterProvider" >
+        <property name="postProcessors" ref="fooBrowseFilterProviderProcessors" />
+    </bean>
+
+    <bean id="fooBrowseFilterProviderProcessors" class="com.jivesoftware.community.util.spring.MergeableCollection">
+        <property name="source">
+            <util:list />
+        </property>
+    </bean>
+
+    <bean id="fooCache" parent="cacheBean" depends-on="cacheFactoryManager">
+        <constructor-arg value="Foos" />
+    </bean>
+
+    <bean id="fooCommentableTypeInfoProvider" class="com.jivesoftware.sbs.plugins.foo.provider.FooCommentableTypeInfoProvider">
+        <property name="commentAnonymousUserStrategy" ref="genericCommentAnonymousUserStrategy" />
+        <property name="commentDelegatorStrategy" ref="genericCommentDelegatorStrategy" />
+    </bean>
+
+    <bean id="fooContainableTypeInfoProvider" class="com.jivesoftware.sbs.plugins.foo.provider.FooContainableTypeInfoProvider" >
+        <property name="jiveObjectLoader" ref="jiveObjectLoaderImpl" />
+        <property name="entitlementCheckProvider" ref="fooEntitlementCheckProvider" />
+    </bean>
+
+    <bean id="fooContainableTypeManager" class="com.jivesoftware.sbs.plugins.foo.provider.FooContainableTypeManager" >
+        <property name="fooManager" ref="fooManager" />
+    </bean>
+
+    <bean id="fooContentTypeInfoProvider" class="com.jivesoftware.sbs.plugins.foo.provider.FooContentObjectTypeInfoProvider" >
+        <property name="entitlementCheckProvider" ref="fooEntitlementCheckProvider" />
+        <property name="fooObjectTypeProvider" ref="fooObjectTypeProvider" />
+        <property name="userManager" ref="userManager" />
+        <property name="fooManager" ref="fooManager" />
+    </bean>
+
+    <bean id="fooContentViewBeanBuilder" class="com.jivesoftware.sbs.plugins.foo.eae.view.stream.item.FooContentViewBeanBuilder" >
+        <property name="authProvider" ref="authenticationProvider" />
+    </bean>
+
+    <bean id="fooConverter" class="com.jivesoftware.sbs.plugins.foo.impl.FooConverter">
+        <property name="containerManager" ref="jiveContainerManagerImpl" />
+        <property name="objectTypeProvider" ref="fooObjectTypeProvider" />
+        <property name="renderCacheManager" ref="renderCacheManager" />
+        <property name="userManager" ref="userManagerImpl" />
+        <property name="viewCountProvider" ref="fooViewCountProvider" />
+        <property name="imageHelper" ref="fooImageHelper" />
+    </bean>
+
+    <bean id="fooDao" class="com.jivesoftware.sbs.plugins.foo.dao.FooDaoImpl">
+        <property name="dataSource">
+            <util:property-path path="dataSourceFactory.dataSource" />
+        </property>
+        <property name="rowMapper" ref="fooBeanRowMapper" />
+        <property name="sequenceProvider" ref="fooSequenceProvider" />
+    </bean>
+
+    <bean id="fooEntitlementCheckProvider" class="com.jivesoftware.sbs.plugins.foo.provider.FooEntitlementCheckProvider" parent="baseEntitlementProvider">
+        <property name="fooObjectTypeProvider" ref="fooObjectTypeProvider" />
+    </bean>
+
+    <bean id="fooFilteredContentProvider" class="com.jivesoftware.sbs.plugins.foo.provider.FooFilteredContentProvider" >
+        <property name="fooObjectTypeProvider" ref="fooObjectTypeProvider" />
+        <property name="communityManager" ref="communityManagerImpl" />
+    </bean>
+    <bean id="fooGenericTaggableTypeInfoProvider" class="com.jivesoftware.sbs.plugins.foo.provider.FooGenericTaggableTypeInfoProvider" />
+    <bean id="fooIconGenerator" class="com.jivesoftware.sbs.plugins.foo.provider.FooIconGenerator" />
+
+    <bean id="fooItemBeanInfoProvider" class="com.jivesoftware.sbs.plugins.foo.provider.FooItemBeanPropertyProvider" />
+
+    <bean id="fooImageHelper" class="com.jivesoftware.sbs.plugins.foo.FooImageHelper" >
+        <property name="imageManager" ref="imageManager" />
+    </bean>
+    <bean id="fooIndexInfoProvider" class="com.jivesoftware.sbs.plugins.foo.provider.FooIndexInfoProvider">
+        <property name="dataSource" ref="searchDataSource" />
+        <property name="fooManager" ref="fooManagerImpl" />
+        <property name="fooObjectTypeProvider" ref="fooObjectTypeProvider" />
+        <property name="tagManager" ref="tagManager" />
+    </bean>
+    <bean id="fooLinkProvider" class="com.jivesoftware.sbs.plugins.foo.provider.FooLinkProvider" />
+
+    <bean id="fooManager" name="fooManagerProxy" class="com.jivesoftware.sbs.plugins.foo.proxy.FooManagerProxy" >
+        <property name="authProvider" ref="authenticationProvider" />
+        <property name="containerManager" ref="jiveContainerManager" />
+        <property name="delegate" ref="fooManagerImpl" />
+        <property name="entitlementCheckProvider" ref="fooEntitlementCheckProvider" />
+        <property name="entitlementTypeProvider" ref="entitlementTypeProviderImpl" />
+    </bean>
+
+    <bean id="fooManagerImpl" class="com.jivesoftware.sbs.plugins.foo.impl.FooManagerImpl">
+        <property name="fooCache" ref="fooCache" />
+        <property name="fooConverter" ref="fooConverter" />
+        <property name="fooDao" ref="fooDao" />
+        <property name="queryCacheManager" ref="queryCacheManagerImpl" />
+        <property name="eventDispatcher" ref="jiveEventDispatcher" />
+        <property name="interceptorManager" ref="interceptorManagerImpl"/>
+        <property name="renderCacheManager" ref="renderCacheManager" />
+        <property name="authenticationProvider" ref="authenticationProvider"/>
+        <property name="communityManager" ref="communityManagerImpl" />
+        <property name="imageHelper" ref="fooImageHelper" />
+        <property name="tagManager" ref="tagManager" />
+    </bean>
+
+    <bean id="fooModerationStrategy" class="com.jivesoftware.sbs.plugins.foo.provider.FooModerationStrategy" parent="defaultModerationStrategy" >
+        <property name="fooManager" ref="fooManagerImpl" />
+    </bean>
+
+    <bean id="fooModerationUIProvider" class="com.jivesoftware.sbs.plugins.foo.provider.FooModerationUIProvider">
+        <property name="fooObjectTypeProvider" ref="fooObjectTypeProvider" />
+        <property name="objectFactory" ref="fooObjectFactory" />
+    </bean>
+
+	<bean id="fooMoveObjectProvider" class="com.jivesoftware.sbs.plugins.foo.provider.FooMoveObjectProvider">
+        <property name="fooManager" ref="fooManager" />
+    </bean>
+
+    <bean id="fooNavBarProvider" class="com.jivesoftware.community.navbar.impl.DynamicNavBarProvider">
+        <lookup-method name="getCreateMenuLinkInstance" bean="createMenuFooLink" />
+    </bean>
+
+    <bean id="fooNotificationInfoProvider" class="com.jivesoftware.sbs.plugins.foo.provider.FooNotificationInfoProvider" />
+
+    <bean id="fooObjectFactory" class="com.jivesoftware.sbs.plugins.foo.FooObjectFactory" >
+        <property name="objectFactory" ref="fooManagerImpl" />
+        <property name="proxiedObjectFactory" ref="fooManager" />
+        <property name="proxyFactory" ref="fooManager" />
+    </bean>
+
+    <bean id="fooObjectType" class="com.jivesoftware.sbs.plugins.foo.FooObjectType" >
+        <property name="acclaimInfoProvider" ref="contentAcclaimInfoProvider" />
+        <property name="activityUpgradeProvider" ref="fooActivityUpgradeProvider" />
+        <property name="browseDataProvider" ref="fooBrowseDataProvider" />
+        <property name="browseFilterProvider" ref="fooBrowseFilterProvider" />
+        <property name="jiveObjectFactory" ref="fooObjectFactory" />
+        <property name="containableTypeInfoProvider" ref="fooContainableTypeInfoProvider" />
+        <property name="containableTypeManager" ref="fooContainableTypeManager" />
+        <property name="typeUiProvider" ref="fooTypeUIProvider" />
+        <property name="contentObjectTypeInfoProvider" ref="fooContentTypeInfoProvider" />
+        <property name="shareProvider" ref="fooShareObjectProvider" />
+        <property name="filteredContentProvider" ref="fooFilteredContentProvider" />
+        <property name="genericTaggableTypeInfoProvider" ref="fooGenericTaggableTypeInfoProvider" />
+        <property name="taggableTypeInfoProvider" ref="fooTaggableTypeInfoProvider" />
+        <property name="recentContentInfoProvider" ref="fooRecentContentInfoProvider" />
+        <property name="indexInfoProvider" ref="fooIndexInfoProvider" />
+        <property name="moderationStrategy" ref="fooModerationStrategy" />
+        <property name="moderationUIProvider" ref="fooModerationUIProvider" />
+        <property name="moveObjectProvider" ref="fooMoveObjectProvider" />
+        <property name="navBarProvider" ref="fooNavBarProvider" />
+        <property name="recentActivityInfoProvider" ref="fooRecentActivityInfoProvider" />
+        <property name="notificationInfoProvider" ref="fooNotificationInfoProvider" />
+        <property name="recentActivitySoyTemplateInfoProvider" ref="fooRecentActivitySoyTemplateInfoProvider" />
+        <property name="commentableTypeInfoProvider" ref="fooCommentableTypeInfoProvider" />
+        <property name="favoriteInfoProvider" ref="jiveContentObjectFavoriteInfoProvider" />
+        <property name="viewCountSupport" ref="fooViewCountSupport" />
+        <property name="entitlementCheckProvider" ref="fooEntitlementCheckProvider" />
+    </bean>
+
+    <bean id="fooObjectTypeProvider" class="com.jivesoftware.community.lifecycle.spring.impl.BeanProviderImpl">
+        <property name="objectTypeBean" value="fooObjectType"/>
+    </bean>
+
+    <bean id="fooParamMapObjectFactory" class="com.jivesoftware.sbs.plugins.foo.provider.FooParamMapObjectFactory" >
+        <property name="fooManager" ref="fooManagerImpl" />
+    </bean>
+
+    <bean id="fooProxyProvider" class="com.jivesoftware.sbs.plugins.foo.proxy.FooProxyProvider">
+        <property name="entitlementCheckProvider" ref="fooEntitlementCheckProvider" />
+    </bean>
+
+    <bean id="fooRecentActivityInfoProvider" class="com.jivesoftware.sbs.plugins.foo.provider.FooRecentActivityInfoProvider" >
+            <property name="fooContentViewBeanBuilder" ref="fooContentViewBeanBuilder" />
+    </bean>
+
+    <bean id="fooRecentActivitySoyTemplateInfoProvider" class="com.jivesoftware.community.activity.type.BaseRecentActivitySoyTemplateInfoProvider" parent="baseRecentActivitySoyTemplateInfoProvider">
+        <property name="activityContentExcerptTemplateName" value="jive.eae.foo.activityContentExcerpt" />
+        <property name="collapsedActivityStreamExcerptTemplateName" value="jive.eae.foo.collapsedActivityStreamExcerpt" />
+        <property name="commListItemViewTemplateName" value="jive.eae.foo.commListItemView" />
+        <property name="detailedTemplateName" value="jive.eae.foo.detailed" />
+        <property name="expandedActivityStreamViewTemplateName" value="jive.eae.foo.expandedActivityStreamView" />
+        <property name="expandedCommItemViewTemplateName" value="jive.eae.foo.expandedCommItemView" />
+        <property name="groupedActivityStreamTemplateName" value="jive.eae.foo.groupedActivityStream" />
+        <property name="groupedCommTemplateName" value="jive.eae.foo.groupedComm" />
+    </bean>
+
+    <bean id="fooRecentContentInfoProvider" class="com.jivesoftware.sbs.plugins.foo.provider.FooRecentContentInfoProvider">
+        <property name="fooDao" ref="fooDao" />
+    </bean>
+    <bean id="fooSequenceProvider" class="com.jivesoftware.base.database.dao.impl.SequenceProviderImpl">
+        <constructor-arg>
+            <util:constant static-field="com.jivesoftware.sbs.plugins.foo.FooObjectType.FOO_TYPE_ID"/>
+        </constructor-arg>
+        <constructor-arg ref="sequenceDAO"/>
+    </bean>
+
+    <bean id="fooShareObjectProvider" class="com.jivesoftware.sbs.plugins.foo.provider.FooShareObjectProvider" />
+
+    <bean id="fooTaggableTypeInfoProvider" class="com.jivesoftware.sbs.plugins.foo.provider.FooTaggableTypeInfoProvider" >
+        <property name="fooObjectTypeProvider" ref="fooObjectTypeProvider" />
+    </bean>
+    <bean id="fooTypeUIProvider" class="com.jivesoftware.sbs.plugins.foo.provider.FooTypeUIProvider">
+        <property name="iconGenerator" ref="fooIconGenerator" />
+        <property name="jiveObjectURLFactory" ref="fooURLFactory" />
+        <property name="linkProvider" ref="fooLinkProvider" />
+        <property name="fooItemBeanInfoProvider" ref="fooItemBeanInfoProvider" />
+        <property name="macroNames">
+            <list>
+                <value>foo</value>
+            </list>
+        </property>
+        <property name="paramMapObjectFactories">
+            <map>
+                <entry key="foo" value-ref="fooParamMapObjectFactory" />
+            </map>
+        </property>
+    </bean>
+
+    <bean id="fooURLFactory" class="com.jivesoftware.sbs.plugins.foo.provider.FooURLFactory" />
+
+    <bean id="fooViewCountProvider" class="com.jivesoftware.sbs.plugins.foo.impl.ViewCountProvider">
+        <property name="viewCountManager" ref="viewCountManager" />
+    </bean>
+
+    <bean id="fooViewCountCache" parent="cacheBean" depends-on="cacheFactoryManager">
+        <constructor-arg value="Foo View Count Cache" />
+    </bean>
+
+    <bean id="fooViewCountSupport" class="com.jivesoftware.sbs.plugins.foo.provider.FooViewCountSupport" >
+        <property name="countCache" ref="fooViewCountCache"/>
+        <property name="eventDispatcher" ref="jiveEventDispatcher"/>
+    </bean>
+
+    <bean id="fooPlaceContentActionLinks" parent="placeContentActionLinks" class="com.jivesoftware.community.util.spring.MergeableCollection" scope="prototype">
+		<property name="source">
+			<util:list value-type="com.jivesoftware.community.web.component.ActionLink" scope="prototype">
+				<ref bean="placeCreateFooLink"/>
+			</util:list>
+		</property>
+	</bean>
+
+	<bean id="placeCreateFooLink" class="com.jivesoftware.sbs.plugins.foo.community.places.PlaceCreateFooLink" parent="actionLinkBase" scope="prototype">
+		<property name="iconCss" value="jive-icon-foo"/>
+		<property name="nameKey" value="nav.bar.create.foo"/>
+	</bean>
+
+	<bean id="fooServiceSoapImpl" class="com.jivesoftware.sbs.plugins.foo.services.soap.FooServiceImpl" >
+		<property name="documentManager" ref="documentManagerImpl" />
+	</bean>
+
+	<bean id="fooServiceRestImpl" class="com.jivesoftware.sbs.plugins.foo.services.rest.FooServiceImpl" parent="remoteSupport">
+		<property name="documentManager" ref="documentManagerImpl" />
+	</bean>
+
+	<jaxws:endpoint id="fooSoapService" address="/soap/FooService" >
+		<jaxws:implementor>
+			<ref bean="fooServiceSoapImpl" />
+		</jaxws:implementor>
+		<jaxws:outFaultInterceptors>
+			<ref bean="serverExceptionInterceptor" />
+		</jaxws:outFaultInterceptors>
+		<jaxws:inInterceptors>
+			<ref bean="saajInInterceptor" />
+			<ref bean="wss4jInInterceptor" />
+			<ref bean="validationCheckInterceptor" />
+		</jaxws:inInterceptors>
+	</jaxws:endpoint>
+
+    <jaxrs:server id="fooRestService" address="/v2/rest/foo">
+        <jaxrs:serviceBeans>
+            <ref bean="fooServiceRestImpl" />
+        </jaxrs:serviceBeans>
+        <jaxrs:providers>
+            <ref bean="secureJacksonJsonProvider" />
+            <ref bean="securityInterceptor" />
+        </jaxrs:providers>
+    </jaxrs:server>
+
+   	<bean id="fooWidgetUtils" class="com.jivesoftware.sbs.plugins.foo.action.remote.FooWidgetUtils" parent="remoteSupport">
+		<property name="documentManager" ref="documentManagerImpl" />
+		<dwr:remote javascript="FooWidgetUtils">
+			<dwr:include method="getBean" />
+		</dwr:remote>
+	</bean>
+	<dwr:configuration>
+		<dwr:convert class="com.jivesoftware.sbs.plugins.foo.action.remote.FooWidgetResponse" type="bean">
+			<dwr:include method="bean"/>
+		    <dwr:include method="requestStatus"/>
+		    <dwr:include method="statusMessage"/>
+		</dwr:convert>
+		<dwr:convert class="com.jivesoftware.sbs.plugins.foo.action.remote.FooWidgetBean" type="bean">
+			<dwr:include method="key"/>
+		    <dwr:include method="value"/>
+		    <dwr:include method="timestamp"/>
+		</dwr:convert>
+	</dwr:configuration>
+</beans>

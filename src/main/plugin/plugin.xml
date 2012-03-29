@@ -1,0 +1,137 @@
+<plugin xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:noNamespaceSchemaLocation="http://www.jivesoftware.com/schemas/clearspace/2_5/plugin.xsd">
+	<name>${project.name}</name>
+    <description>${project.description}</description>
+    <author>${project.developers[0].name}</author>
+    <authorURL>${project.developers[0].url}</authorURL>
+    <pluginURL>${project.url}</pluginURL>
+    <version>${project.version}</version>
+    <minServerVersion>${jive.min.version}</minServerVersion>
+	<maxServerVersion>${jive.max.version}</maxServerVersion>
+
+    <class>com.jivesoftware.sbs.plugins.foo.plugin.JiveFooPlugin</class>
+
+    <databaseKey>foos</databaseKey>
+    <databaseVersion>100000</databaseVersion>
+
+    <css src="/resources/styles/foo.css" />
+    <javascript src="/resources/script/foo.js" />
+
+    <!-- URL mapping class -->
+    <urlmapping prefix="/foos" class="com.jivesoftware.sbs.plugins.foo.web.FooURLMapping"/>
+
+    <!-- Widgets! -->
+    <widget class="com.jivesoftware.sbs.plugins.foo.widget.FooWidget" />
+
+    <!-- macro -->
+    <macro name="foo" class="com.jivesoftware.sbs.plugins.foo.macro.FooMacro">
+        <parameterSet name="default">
+            <parameter name="id"/>
+            <parameter name="__default_attr" />
+            <parameter name="title" />
+        </parameterSet>
+    </macro>
+
+    <sitemesh>
+        <decorator name="default" page="default/template.ftl">
+            <pattern>/foos/*</pattern>
+        </decorator>
+        <decorator name="default" page="default/template.ftl">
+            <pattern>/foos*</pattern>
+        </decorator>
+    </sitemesh>
+
+    <components>
+    	<!-- admin console -->
+        <component id="admin-console">
+        	<tab id="system">
+				<section id="section-global-settings">
+					<item id="foo-admin-configure" name="foo.action.admin.configure.title">
+		                <url>./configure-foo!input.jspa</url>
+		            </item>
+				</section>
+			</tab>
+        </component>
+
+        <!-- community -->
+        <component id="community-actions">
+            <tab id="community-actions-tab">
+                <item id="jive-link-create-community-foo" name="community.create.foo.link" cssClass="jive-icon-med jive-icon-foo">
+                    <when><![CDATA[statics['com.jivesoftware.sbs.plugins.foo.proxy.FooPermHelper'].getCanCreateFoo(community)]]></when>
+                    <url>
+                        <![CDATA[
+                            <@s.url action='create-foo' method='input'>
+                                <@s.param name='container' value='${community.ID?c}'/>
+                                <@s.param name='containerType' value='${community.objectType?c}'/>
+                            </@s.url>]]>
+                    </url>
+                </item>
+            </tab>
+        </component>
+
+        <!-- social group -->
+        <component id="socialgroup-actions">
+            <tab id="socialgroup-actions-tab">
+                <item id="jive-link-create-socialgroup-foo" name="sgroup.create.foo.link" cssClass="jive-icon-med jive-icon-foo">
+                    <when><![CDATA[statics['com.jivesoftware.sbs.plugins.foo.proxy.FooPermHelper'].getCanCreateFoo(socialGroup)]]></when>
+                    <url>
+                        <![CDATA[
+                            <@s.url action='create-foo' method='input'>
+                                <@s.param name='container' value='${socialGroup.ID?c}'/>
+                                <@s.param name='containerType' value='${socialGroup.objectType?c}'/>
+                            </@s.url>
+                        ]]>
+                    </url>
+                </item>
+            </tab>
+        </component>
+
+        <!-- project -->
+        <component id="project-actions">
+            <tab id="project-actions-tab">
+                <item id="jive-link-create-project-foo" name="project.create.foo.link" cssClass="jive-icon-med jive-icon-foo">
+                    <when><![CDATA[statics['com.jivesoftware.sbs.plugins.foo.proxy.FooPermHelper'].getCanCreateFoo(project)]]></when>
+                    <url>
+                        <![CDATA[
+                            <@s.url action='create-foo' method='input'>
+                                <@s.param name='container' value='${project.ID?c}'/>
+                                <@s.param name='containerType' value='${project.objectType?c}'/>
+                            </@s.url>
+                        ]]>
+                    </url>
+                </item>
+            </tab>
+        </component>
+        <component id="foo-actions">
+            <tab id="foo-actions-tab" name="global.actions">
+                <item id="jive-foo-edit" name="foo.edit.link" cssClass="jive-icon-med jive-icon-edit">
+                    <when><![CDATA[statics['com.jivesoftware.sbs.plugins.foo.proxy.FooPermHelper'].getCanUpdateFoo(foo)]]></when>
+                    <url><![CDATA[<@s.url value='/edit-foo!input.jspa?foo=${foo.ID?c}'></@s.url>]]></url>
+                </item>
+                <item id="jive-foo-delete" name="foo.delete.link" cssClass="jive-icon-med jive-icon-delete js-link-delete">
+                    <when><![CDATA[statics['com.jivesoftware.sbs.plugins.foo.proxy.FooPermHelper'].getCanDeleteFoo(foo)]]></when>
+                    <url><![CDATA[<@s.url value='/delete-foo!input.jspa?foo=${foo.ID?c}'></@s.url>]]></url>
+                </item>
+                <item id="jive-link-move" name="foo.main.move_foo.link" cssClass="jive-icon-med jive-icon-move">
+                    <url><![CDATA[<@s.url action='content-move' method='input'><@s.param name='objectType' value='${foo.objectType?c}'/><@s.param name='objectID' value='${foo.ID?c}'/></@s.url>]]></url>
+                    <when><![CDATA[JiveContainerPermHelper.isContainerModerator(container) || canEdit]]></when>
+                </item>
+                <item id="featured-toggle-unfeature" url="#" onclick="toggleFeatured(); return false;" name="featuredcontent.unfeature" cssClass="jive-icon-med jive-icon-forbidden">
+                    <when><![CDATA[JiveContainerPermHelper.isContainerAdmin(container) && foo.status == Status.PUBLISHED]]></when>
+                    <style><![CDATA[<#if !action.isFeatureable(foo)>display:none<#elseif !action.isFeatured(foo) >display:none</#if>]]></style>
+                </item>
+                <item id="featured-toggle-feature" url="#" onclick="toggleFeatured(); return false;" name="featuredcontent.feature" cssClass="jive-icon-med jive-icon-plus">
+                    <when><![CDATA[JiveContainerPermHelper.isContainerAdmin(container) && foo.status == Status.PUBLISHED]]></when>
+                    <style><![CDATA[<#if !action.isFeatureable(foo)>display:none<#elseif action.isFeatured(foo) >display:none</#if>]]></style>
+                </item>
+                <item id="jive-link-abuse" name="abuse.report_abuse.link" cssClass="jive-icon-med jive-icon-warn js-link-abuse">
+                    <when><![CDATA[jiveContext.getAbuseManager().isReportAbuseEnabled() && (user?exists && !user.anonymous && user.ID != foo.user.ID)]]></when>
+                    <url><![CDATA[<@s.url action='message-abuse' method='input'><@s.param name='objectID' value='${foo.ID?c}'/><@s.param name='objectType' value='${foo.objectType?c}'/></@s.url>]]></url>
+                </item>
+            </tab>
+        </component>
+
+     </components>
+
+</plugin>
+

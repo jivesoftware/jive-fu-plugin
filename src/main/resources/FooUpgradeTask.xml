@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<schema name="FooUpgradeTask">
+    <sql description="Foo Upgrade Task"><![CDATA[
+
+    		DELETE FROM jiveProperty WHERE name='foo.upgrade.prop';
+			INSERT INTO jiveProperty(name,propvalue) VALUES('foo.upgrade.prop','Hello Foo!');
+
+	]]>
+	</sql>
+</schema>

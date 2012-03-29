@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<message-templates>
+    <template name="watches.email.foo" displayName="Foo Watch">
+        <description>Email sent to a user triggered by activity on foos.</description>
+        <bean>com.jivesoftware.community.email.beans.ContentWatchBean</bean>
+        <instructions>
+            <![CDATA[The following tokens may be used as part of this email:<br /><br />
+            ${containerName} ${contentSubject} ${contentBody} ${contentTextBody} ${contentURL} ${contentAuthorName} ${contentAuthorURL} ${emailReplyEnabled} ${newContentAddress} ${newContentURL} ${isNewContentItem} <br /><br />
+            Additionally, the following full objects are available:<br/><br/>
+            ${container} ${foo} ${message}
+            ]]>
+        </instructions>
+        <subject>
+            <![CDATA[[${containerName}] - ${contentSubject}]]>
+        </subject>
+        <textBody>
+            <![CDATA[
+${contentAuthorName} <#if contentAuthorURL?has_content>[${contentAuthorURL}]</#if> <#if isNewContentItem?? && isNewContentItem>created<#else>modified</#if> the foo:
+
+"${contentSubject}"
+
+To view the foo, visit: ${contentURL}
+
+<#if includePostContentInEmail>
+--------------------------------------------------------------
+${contentTextBody}
+--------------------------------------------------------------
+</#if>
+
+<#if emailReplyEnabled>
+Comment by replying to this email -or- go to the foo on ${SkinUtils.getCommunityName()}
+[${contentURL}]
+<#elseif hasRespondEntitlement>
+Comment by going to ${SkinUtils.getCommunityName()}
+[${contentURL}]
+</#if>
+
+<#if emailCreateEnabled>
+Create a new foo in ${containerName} by email
+[${newContentAddress}] -or- at ${SkinUtils.getCommunityName()}
+[${newContentURL}]
+<#elseif hasCreateEntitlement>
+Create a new foo in ${containerName} at ${SkinUtils.getCommunityName()}
+[${newContentURL}]
+</#if>
+    ]]>
+        </textBody>
+        <htmlBody>
+            <![CDATA[
+<h3 style="margin: 10px 0 5px; font-size: 17px; font-weight: normal;">
+    ${contentSubject}
+</h3>
+<span style="margin-bottom: 10px;">
+    <#if isNewContentItem?? && isNewContentItem>created by<#else>modified by</#if> <#if contentAuthorURL?has_content><a href="${contentAuthorURL}">${contentAuthorName}</a><#else>${contentAuthorName}</#if> in <i>${containerName}</i> - <a href="${contentURL}">View the foo</a>
+</span>
+<hr style="margin: 20px 0; border: none; background-color: #dadada; height: 1px;">
+
+<#if includePostContentInEmail>
+${contentBody}
+</#if>
+
+<div style="background-color: #f4f4f4; padding: 10px; margin-top: 20px;">
+<#if emailReplyEnabled>
+    <p style="margin: 0;">Comment by replying to this email -or- <a href="${contentURL}">go to the foo on ${SkinUtils.getCommunityName()}</a></p>
+<#elseif hasRespondEntitlement>
+    <p style="margin: 0;">Comment by <a href="${contentURL}">going to ${SkinUtils.getCommunityName()}</a></p>
+</#if>
+
+<#if emailCreateEnabled>
+    <p style="margin: 0;">Create a new foo in ${containerName} by <a href="mailto:${newContentAddress}">email</a> -or- at <a href="${newContentURL}">${SkinUtils.getCommunityName()}</a></p>
+<#elseif hasCreateEntitlement>
+    <p style="margin: 0;">Create a new foo in ${containerName} at <a href="${newContentURL}">${SkinUtils.getCommunityName()}</a></p>
+</#if>
+</div>
+    ]]>
+        </htmlBody>
+
+    </template>
+</message-templates>

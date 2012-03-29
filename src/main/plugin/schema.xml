@@ -1,0 +1,14 @@
+<schema name="foos">
+    <table name="jiveFoo" description="Foo Schema">
+            <column name="fooID" type="bigint"  nullable="false"  description="The id for the type" />
+            <column name="containerID" type="bigint"  nullable="false"  description="The id for the type's container" />
+            <column name="containerType" type="int"  nullable="false"  description="The type of container to which the type belongs" />
+            <column name="userID" type="bigint"  nullable="false"  description="The id of user who created the object" />
+            <column name="status" type="int"  nullable="false"  description="The type's status" />
+            <column name="creationDate" type="bigint"  nullable="false"  description="The time at which the type was created" />
+            <column name="modificationDate" type="bigint"  nullable="false"  description="The time at which the type was last modified" />
+            <column name="title" type="varchar" size="50" nullable="false"  description="The title for the type" />
+            <column name="description" type="text"  nullable="false" index_none="true" unicode="true" description="The body for the type" />
+    </table>
+
+</schema>

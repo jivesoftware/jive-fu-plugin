@@ -1,0 +1,95 @@
+.jive-icon-sml.jive-icon-foo,
+.defaultSkin .jive-icon-sml.jive-icon-foo {
+    background-image: url( ../images/foo-12x12.png);
+    background-position: 0 0;
+}
+
+.jive-icon-med.jive-icon-foo,
+.defaultSkin .jive-icon-med.jive-icon-foo {
+    background-image: url( ../images/foo-16x16.png);
+    background-position: 0 0;
+}
+
+.jive-icon-big.jive-icon-foo,
+.defaultSkin .jive-icon-big.jive-icon-foo {
+    background-image: url( ../images/foo-24x24.png);
+    background-position: 0 0;
+}
+
+.jive-icon-foo-comment {
+    background-image: url( ../images/foo-comment-16x16.png);
+}
+
+.jive-icon-foo-bookmark {
+    background-image: url( ../images/foo-bookmark-16x16.png);
+}
+
+.j-user-link .jive-icon-foo {
+    background-image: url( ../images/foo-12x12.png);
+}
+
+.jive-link-foo {
+    background-repeat: no-repeat;
+    background-position: 0 0;
+    padding: 2px 0 2px 20px;
+    background: transparent url( ../images/foo-16x16.png ) no-repeat top left;
+    padding-top: 1px;
+}
+
+.tiny_mce_content a.jive_macro_foo {
+    background: transparent url(../images/foo-12x12.png ) no-repeat scroll 3px 3px;
+}
+
+/* Edit Foo */
+.jive-foo-cancel {
+    background:transparent url(../../../../../images/jive-icon-delete-16x16.gif) no-repeat scroll left top;
+    padding:2px 0 2px 20px;
+}
+
+.jive-foo-edit {
+    background:transparent url(../../../../../images/jive-icon-edit-16x16.gif) no-repeat scroll left top;
+    padding:2px 0 2px 20px;
+}
+
+/* View Foo */
+body.jive-body-foo #jive-body-maincol-container {
+    width: 99%;
+}
+
+.jive-foo header {
+    margin-right:265px;
+}
+
+#jive-foo-state {
+    text-align: center;
+}
+
+html > body .jive-foo-body {
+    display:block;
+}
+
+.jive-foo .jive-foo-moderating {
+    display: none;
+}
+
+.j-foo-mod .jive-foo-moderating {
+    color: #d89757;
+    font-weight: bold;
+    margin: 0 0 10px;
+    text-transform: uppercase;
+    display: block;
+}
+
+.jive-body-foo .jive-content {
+    padding: 22px 26px;
+    position: relative;
+}
+
+.jive-body-formpage-foo .j-form > p,
+.jive-body-formpage-foo .j-form .j-form-row {
+    margin-bottom: 22px;
+}
+
+#jive-modal-foo-delete p {
+    margin-bottom: 15px;
+}
