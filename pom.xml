@@ -371,7 +371,7 @@
 		<!-- If using <parent> section, remove the <jive.version> line below. -->
     	<jive.version>5.0.2.0</jive.version>
     	<jive.min.version>5.0.0.0</jive.min.version>
-        <jive.max.version>10.10.10.10</jive.max.version>
+        <jive.max.version>5.10.10.10</jive.max.version>
         <final.name>${project.artifactId}-${project.version}-${jive.version}</final.name>
         <build.number>${env.BUILD_NUMBER}</build.number>
         <build.project.name>${project.artifactId}</build.project.name>
